@@ -1,0 +1,20 @@
+﻿@model AwesomeTfsMonitor.ViewModels.LinkListViewModel
+
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>@Model.Title</title>
+    </head>
+    <body>
+        <h1>::: Awesome Build Monitor :::</h1>
+        <h2>@Model.Title</h2>
+        @foreach (var link in Model.Links)
+        {
+            <div>
+                <a href="@link.Key">@link.Value</a>
+            </div>
+        }
+    </body>
+</html>
