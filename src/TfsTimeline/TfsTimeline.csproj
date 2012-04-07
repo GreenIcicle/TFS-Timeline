@@ -177,6 +177,7 @@
     <Content Include="Scripts\qunit.js" />
     <Content Include="Scripts\tfs-timeline.common.js" />
     <Content Include="Scripts\tfs-timeline.viewmodel.build.js" />
+    <Content Include="ScriptTests\tfsTimeline.viewmodel.build.tests.html" />
     <Content Include="ScriptTests\tfsTimeline.common.tests.html" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

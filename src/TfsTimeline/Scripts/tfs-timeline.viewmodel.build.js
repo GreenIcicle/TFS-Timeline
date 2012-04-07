@@ -52,7 +52,7 @@ tfsTimeline.BuildsViewModel = function (serviceUrl) {
         // display FxCop section only if there are either warnings or errors, 
         // hide when there's nothing to show
         buildViewModel.showFxCop = ko.computed(function () {
-            return ((buildViewModel.CodeAnalysiErrors() + buildViewModel.CodeAnalysisWarnings()) > 0);
+            return ((buildViewModel.CodeAnalysisErrors() + buildViewModel.CodeAnalysisWarnings()) > 0);
         });
 
         // indicate that the build is currently running
@@ -65,7 +65,8 @@ tfsTimeline.BuildsViewModel = function (serviceUrl) {
 
         // Formats the information how long the build is running as m:ss
         buildViewModel.runDurationMinutes = ko.computed(function () {
-            return tfsTimeline.formatDuration(self.runDuration());
+            var duration = buildViewModel.runDuration();
+            return tfsTimeline.formatDuration(duration);
         });
 
         // Formats the time that the build has been started at as hh:mm
@@ -90,20 +91,25 @@ tfsTimeline.BuildsViewModel = function (serviceUrl) {
             data: "",
             dataType: "json"
         }).done(function (response) {
-
-            // merge each returned build item into the view model list
-            $.each(response.Builds, function (index, build) {
-                self.refreshBuild(build);
-            });
-
-            // update the service url with the URL to refresh the current build 
-            // list with
-            self.serviceUrl = response.Refresh;
-            self.isLoading(false);
+            updateBuildList(response);
 
             // re-fetch data after 15 seconds
             setTimeout('tfsTimeline.buildsViewModel.refresh();', 15000);
         });
+    };
+
+    // updates the build list with a list of builds that have been 
+    // passed from the web service.
+    self.updateBuildList = function (buildList) {
+        // merge each returned build item into the view model list
+        $.each(buildList.Builds, function (index, build) {
+            self.refreshBuild(build);
+        });
+
+        // update the service url with the URL to refresh the current build 
+        // list with
+        self.serviceUrl = response.Refresh;
+        self.isLoading(false);
     };
 
     // As long as the build is running, update the build duration.
