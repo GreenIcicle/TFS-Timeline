@@ -2,7 +2,16 @@
 @{
     ViewBag.Title = Model.ProjectName + "Builds";
 }
-
+<script type="text/javascript" src="@Url.Content("~/Scripts/tfs-timeline.viewmodel.build.js")"></script>
+<script type="text/javascript">
+    $(function () {
+        var ciBuildServiceUrl = '@Url.Action("BuildTimeline", "BuildsApi", new { projectName = Model.ProjectName, buildName = Model.BuildName })';
+        tfsTimeline.buildsViewModel = new tfsTimeline.BuildsViewModel(ciBuildServiceUrl);
+        ko.applyBindings(buildsViewModel);
+        tfsTimeline.buildsViewModel.refresh();
+        tfsTimeline.buildsViewModel.updateBuildDuration();
+    });
+</script>
 <h2 data-bind="visible:isLoading" style="text-align: center">::: Loading :::</h2>
 
 <div data-bind="foreach: { data: builds, afterAdd: handleAfterAdd }"
@@ -37,128 +46,3 @@
         </div>
 </div></div>
 
-<script type="text/javascript">
-
-    function BuildsViewModel() {
-        var self = this;
-
-        // Observable array of build runs
-        self.builds = ko.observableArray([]);
-
-        self.isLoading = ko.observable(true);
-
-        self.refreshBuild = function (newBuild) {
-            var currentBuild,
-                isNew = true;
-            
-            for (var index = 0; index < self.builds().length; index++) {
-                currentBuild = self.builds()[index];
-                if (currentBuild.Uri() == newBuild.Uri) {
-                    isNew = false;
-                    self.applyBuild(newBuild, currentBuild);
-                }
-            }
-
-            if (isNew == true) {
-                self.builds.splice(0, 0, self.createBuild(newBuild));
-            }
-        };
-
-        // Copies all properties from a normal build to an observble one
-        self.applyBuild = function (build, buildViewModel) {
-            for (var prop in build) {
-                buildViewModel[prop](build[prop]);
-            }
-        };
-
-        // Creates a new observable Build object
-        self.createBuild = function (build) {
-
-            var buildViewModel = {};
-
-            for (var prop in build) {
-                buildViewModel[prop] = ko.observable(build[prop]);
-            }
-
-            buildViewModel.showFxCop = ko.computed(function () {
-                return ((buildViewModel.CodeAnalysisWarnings() + buildViewModel.CodeAnalysisWarnings()) > 0);
-            });
-
-            buildViewModel.isRunning = ko.computed(function () {
-                return buildViewModel.Status() == "Running";
-            });
-
-            buildViewModel.runDuration = ko.observable(0);
-
-            buildViewModel.runDurationMinutes = ko.computed(function () {
-                var time = buildViewModel.runDuration();
-                var minutes = Math.floor(time / 60);
-                var seconds = ("0" + (time - minutes * 60)).slice(-2);
-                return minutes + ":" + seconds;
-            });
-
-            buildViewModel.startedAtTime = ko.computed(function () {
-                var time = self.parseJsonDate(buildViewModel.StartedAt());
-                return time.getHours() + ":" + ("0" + time.getMinutes()).slice(-2);
-            });
-
-            return buildViewModel;
-        };
-
-        self.handleAfterAdd = function (domNode) {
-            $(domNode).fadeIn(800);
-        };
-
-        self.serviceUrl = '@Url.Action("BuildTimeline", "BuildsApi", new { projectName = Model.ProjectName, buildName = Model.BuildName })';
-
-        self.refresh = function () {
-            $.ajax({
-                type: "POST",
-                url: self.serviceUrl,
-                data: "",
-                dataType: "json"
-            }).done(function (response) {
-                $.each(response.Builds, function (index, build) {
-                    self.refreshBuild(build);
-                });
-
-                self.serviceUrl = response.Refresh;
-                self.isLoading(false);
-
-                setTimeout('buildsViewModel.refresh();', 5000);
-            });
-        };
-
-        // As long as the build is running, update the build duration.
-        self.updateBuildDuration = function () {
-            var currentBuild;
-            for (var index = 0; index < self.builds().length; index++) {
-                 currentBuild = self.builds()[index];
-                 currentBuild.runDuration(currentBuild.runDuration() + 1);
-            }
-            setTimeout('buildsViewModel.updateBuildDuration()', 1000);
-        };
-
-        self.parseJsonDate = function (jsonDate) {
-            var offset = new Date().getTimezoneOffset() * 60000;
-            var parts = /\/Date\((-?\d+)([+-]\d{2})?(\d{2})?.*/.exec(jsonDate);
-
-            if (parts[2] == undefined) parts[2] = 0;
-
-            if (parts[3] == undefined) parts[3] = 0;
-
-            if (parts[2] == 0 && parts[3] == 0) offset = 0;
-
-            return new Date(+parts[1] + offset + parts[2] * 3600000 + parts[3] * 60000);
-        };
-    }
-
-    var buildsViewModel = new BuildsViewModel();
-
-    ko.applyBindings(buildsViewModel);
-
-    $(function () {
-        buildsViewModel.refresh();
-        buildsViewModel.updateBuildDuration();
-    });
-</script>
