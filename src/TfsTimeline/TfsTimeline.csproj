@@ -175,7 +175,9 @@
     <Content Include="Scripts\modernizr-1.7.js" />
     <Content Include="Scripts\modernizr-1.7.min.js" />
     <Content Include="Scripts\qunit.js" />
+    <Content Include="Scripts\tfs-timeline.common.js" />
     <Content Include="Scripts\tfs-timeline.viewmodel.build.js" />
+    <Content Include="ScriptTests\tfsTimeline.common.tests.html" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

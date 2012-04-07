@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="../Content/qunit.css"/>
+    <script src="../Scripts/qunit.js"></script>
+    <script src="../Scripts/tfs-timeline.common.js"></script>
+
+    <script>
+        module("parseJsonDate");
+
+        test("parse date without time zone", function () {
+            var date = "\/Date(1320825600000)\/";
+            var expected = new Date(2011, 10, 9, 9);
+
+            var result = tfsTimeline.parseJsonDate(date);
+
+            equals(result.toISOString(), expected.toISOString());
+        });
+
+        test("parse date with time zone", function () {
+            var date = "\/Date(1320825600000-0800)\/";
+            var expected = new Date(2011, 10, 8, 23);
+
+            var result = tfsTimeline.parseJsonDate(date);
+
+            equals(result.toISOString(), expected.toISOString());
+        });
+
+        module("formatDuration");
+
+        test("less than ten seconds", function () {
+            var duration = 6;
+            var expected = "0:06";
+
+            var result = tfsTimeline.formatDuration(duration);
+
+            equals(expected, result);
+        });
+
+        test("more than ten seconds", function () {
+            var duration = 46;
+            var expected = "0:46";
+
+            var result = tfsTimeline.formatDuration(duration);
+
+            equals(expected, result);
+        });
+
+        test("less than ten minutes", function () {
+            var duration = 181;
+            var expected = "3:01";
+
+            var result = tfsTimeline.formatDuration(duration);
+
+            equals(expected, result);
+        });
+
+        test("more than ten minutes", function () {
+            var duration = 615;
+            var expected = "10:15";
+
+            var result = tfsTimeline.formatDuration(duration);
+
+            equals(expected, result);
+        });
+
+        test("more than an hour", function () {
+            var duration = 3670;
+            var expected = "1:01:10";
+
+            var result = tfsTimeline.formatDuration(duration);
+
+            equals(expected, result);
+        });
+
+        module("getShortTime");
+
+        test("before 10AM", function () {
+            var time = new Date(2012, 4, 7, 9, 40, 30);
+            var expected = "9:40";
+
+            var result = tfsTimeline.formatShortTime(time);
+
+            equals(expected, result);
+        });
+
+        test("after 12AM", function () {
+            var time = new Date(2012, 4, 7, 13, 5, 30);
+            var expected = "13:05";
+
+            var result = tfsTimeline.formatShortTime(time);
+
+            equals(expected, result);
+        });
+       
+    </script>
+
+</head>
+    <body>
+        <h1 id="qunit-header">tfs-timeline.common.js</h1>
+        <h2 id="qunit-banner"></h2>
+        <ol id="qunit-tests"></ol>
+        <div id="main"></div>
+    </body>
+</html>

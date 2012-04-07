@@ -65,7 +65,7 @@ tfsTimeline.BuildsViewModel = function (serviceUrl) {
 
         // Formats the information how long the build is running as m:ss
         buildViewModel.runDurationMinutes = ko.computed(function () {
-            return tfsTimeline.formatDurationAsMinutes(self.runDuration());
+            return tfsTimeline.formatDuration(self.runDuration());
         });
 
         // Formats the time that the build has been started at as hh:mm
