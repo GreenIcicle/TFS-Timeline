@@ -5,7 +5,7 @@ using System.Web.Routing;
 using Ninject;
 using Ninject.Web.Common;
 
-namespace AwesomeTfsMonitor
+namespace Greenicicle.TfsTimeline
 {
     public class MvcApplication : NinjectHttpApplication
     {

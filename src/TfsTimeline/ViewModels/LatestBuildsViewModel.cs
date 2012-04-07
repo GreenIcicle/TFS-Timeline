@@ -1,4 +1,4 @@
-﻿namespace AwesomeTfsMonitor.ViewModels
+﻿namespace Greenicicle.TfsTimeline.ViewModels
 {
     public class LatestBuildsViewModel
     {

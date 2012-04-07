@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
 
-using AwesomeTfsMonitor.ViewModels;
+using Greenicicle.TfsTimeline.ViewModels;
 
-namespace AwesomeTfsMonitor.Controllers
+namespace Greenicicle.TfsTimeline.Controllers
 {
     public class HomeController : Controller
     {

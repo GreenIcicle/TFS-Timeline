@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.UI;
 
 using AwesomeTfsMonitor.Models;
 
-namespace AwesomeTfsMonitor.Controllers
+namespace Greenicicle.TfsTimeline.Controllers
 {
     public class BuildsApiController : Controller
     {

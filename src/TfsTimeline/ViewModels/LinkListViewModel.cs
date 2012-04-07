@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AwesomeTfsMonitor.ViewModels
+namespace Greenicicle.TfsTimeline.ViewModels
 {
     public class LinkListViewModel
     {

@@ -2,9 +2,10 @@
 using System.Web.Mvc;
 
 using AwesomeTfsMonitor.Models;
-using AwesomeTfsMonitor.ViewModels;
 
-namespace AwesomeTfsMonitor.Controllers
+using Greenicicle.TfsTimeline.ViewModels;
+
+namespace Greenicicle.TfsTimeline.Controllers
 {
     public class BuildsController : Controller
     {
