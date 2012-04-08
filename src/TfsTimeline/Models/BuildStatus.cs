@@ -1,4 +1,4 @@
-﻿namespace AwesomeTfsMonitor.Models
+﻿namespace Greenicicle.TfsTimeline.Models
 {
     public enum BuildStatus
     {

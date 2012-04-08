@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AwesomeTfsMonitor.Models
+namespace Greenicicle.TfsTimeline.Models
 {
     public class BuildInformation
     {

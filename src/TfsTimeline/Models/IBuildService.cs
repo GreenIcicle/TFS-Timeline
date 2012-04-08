@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace AwesomeTfsMonitor.Models
+namespace Greenicicle.TfsTimeline.Models
 {
     public interface IBuildService
     {

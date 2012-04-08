@@ -1,8 +1,7 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
 
-using AwesomeTfsMonitor.Models;
-
+using Greenicicle.TfsTimeline.Models;
 using Greenicicle.TfsTimeline.ViewModels;
 
 namespace Greenicicle.TfsTimeline.Controllers

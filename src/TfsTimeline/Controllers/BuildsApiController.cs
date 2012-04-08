@@ -3,7 +3,7 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Web.UI;
 
-using AwesomeTfsMonitor.Models;
+using Greenicicle.TfsTimeline.Models;
 
 namespace Greenicicle.TfsTimeline.Controllers
 {

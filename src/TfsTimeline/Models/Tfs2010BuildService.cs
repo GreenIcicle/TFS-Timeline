@@ -6,7 +6,7 @@ using Microsoft.TeamFoundation.Build.Client;
 using Microsoft.TeamFoundation.TestManagement.Client;
 using Microsoft.TeamFoundation.VersionControl.Client;
 
-namespace AwesomeTfsMonitor.Models
+namespace Greenicicle.TfsTimeline.Models
 {
     public class Tfs2010BuildService : IBuildService
     {
@@ -112,3 +112,4 @@ namespace AwesomeTfsMonitor.Models
         }
     }
 }
+gi
