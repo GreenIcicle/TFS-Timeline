@@ -27,6 +27,10 @@ tfsTimeline.formatShortTime = function (time) {
     return time.getHours() + ":" + tfsTimeline.padLeadingZero(time.getMinutes());
 };
 
-tfsTimeline.padLeadingZero = function(number) {
+tfsTimeline.padLeadingZero = function (number) {
     return ("0" + number).slice(-2);
-}
+};
+
+tfsTimeline.setTimeout = function (command, milliseconds) {
+    setTimeout(command, milliseconds);
+};

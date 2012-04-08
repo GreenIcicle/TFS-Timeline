@@ -2,6 +2,7 @@
 <html>
 <head>
     <link rel="stylesheet" href="../Content/qunit.css" />
+    <script src="../Scripts/jquery-1.7.1.js"></script>
     <script src="../Scripts/qunit.js"></script>
     <script src="../Scripts/knockout.debug.js"></script>
     <script src="../Scripts/tfs-timeline.common.js"></script>
@@ -89,7 +90,98 @@
             equal(scenario.buildViewModel.startedAtTime(), "9:00");
         });
 
+        module("merge builds into list", {
+            setup: function () {
+                scenario.subject = new tfsTimeline.BuildsViewModel('');
+                scenario.subject.mergeBuildIntoList({
+                    Uri: "http://greenicicle.com/build/1",
+                    Status: "Running",
+                    StartedAt: "\/Date(1320825600000)\/",
+                    TriggeredBy: "me",
+                    CodeAnalysisErrors: 0,
+                    CodeAnalysisWarnings: 0
+                });
+            },
+            teardown: function () {
+                scenario = {};
+            }
+        });
 
+        test("new build is added at top position", function () {
+            scenario.subject.mergeBuildIntoList({
+                Uri: "http://greenicicle.com/build/2",
+                Status: "Running",
+                StartedAt: "\/Date(1320825600000)\/",
+                TriggeredBy: "me",
+                CodeAnalysisErrors: 0,
+                CodeAnalysisWarnings: 0
+            });
+
+            expect(3);
+            equal(scenario.subject.builds().length, 2);
+            equal(scenario.subject.builds()[0].Uri(), "http://greenicicle.com/build/2");
+            equal(scenario.subject.builds()[1].Uri(), "http://greenicicle.com/build/1");
+        });
+
+        test("existing build is updated", function () {
+            scenario.subject.mergeBuildIntoList({
+                Uri: "http://greenicicle.com/build/1",
+                Status: "Failed",
+                StartedAt: "\/Date(1320825600000)\/",
+                TriggeredBy: "me",
+                CodeAnalysisErrors: 5,
+                CodeAnalysisWarnings: 0
+            });
+
+            expect(3);
+            equal(scenario.subject.builds().length, 1);
+            equal(scenario.subject.builds()[0].Uri(), "http://greenicicle.com/build/1");
+            equal(scenario.subject.builds()[0].Status(), "Failed");
+        });
+
+        test("build run duration is updated", function () {
+            var currentTime = new Date(2011, 10, 9, 9, 2);
+            scenario.subject.updateBuildDuration(currentTime);
+
+            expect(2);
+            equal(scenario.subject.builds()[0].runDuration(), 120);
+            equal(scenario.subject.builds()[0].runDurationMinutes(), "2:00");
+        });
+
+        test("build run duration is scheduled to update", function () {
+            // this is a tricky one. It deals with a timed callback that uses the 
+            // current time as a parameter.
+
+            // For the callback to work, stuff the test subject into its production
+            // namespace.
+            tfsTimeline.buildsViewModel = scenario.subject;
+            
+            // replace the setTimeout function with test double.
+            var stashSetTimeout = tfsTimeline.setTimeout;
+            var currentTime = new Date(2011, 10, 9, 9);
+            var timeout = 0;
+            tfsTimeline.setTimeout = function (command, milliseconds) {
+                // when the callbak occurrs, remember the milliseconds parameter, and
+                // execute the command - but only once, otherwise we'd have a nice 
+                // endless loop.
+                if (timeout === 0) {
+                    timeout = milliseconds;
+                    eval(command);
+                }
+            };
+
+            scenario.subject.updateBuildDuration(currentTime);
+
+            expect(2);
+            // The test double setTimeout function was called...
+            equal(timeout, 1000);
+            // ... and the runDuration should be updated to a longer value
+            // than zero, which it would be if updateBuildDuration had been called
+            // only once.
+            notEqual(scenario.subject.builds()[0].runDuration(), 0);
+
+            tfsTimeline.setTimeout = stashSetTimeout;
+        });
     </script>
 </head>
 <body>

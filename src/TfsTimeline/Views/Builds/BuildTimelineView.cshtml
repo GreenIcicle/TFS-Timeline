@@ -9,7 +9,7 @@
         tfsTimeline.buildsViewModel = new tfsTimeline.BuildsViewModel(ciBuildServiceUrl);
         ko.applyBindings(buildsViewModel);
         tfsTimeline.buildsViewModel.refresh();
-        tfsTimeline.buildsViewModel.updateBuildDuration();
+        tfsTimeline.buildsViewModel.updateBuildDuration(new Date());
     });
 </script>
 <h2 data-bind="visible:isLoading" style="text-align: center">::: Loading :::</h2>

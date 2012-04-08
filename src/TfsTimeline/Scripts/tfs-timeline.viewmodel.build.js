@@ -14,7 +14,7 @@ tfsTimeline.BuildsViewModel = function (serviceUrl) {
     self.isLoading = ko.observable(true);
 
     // merges a build into the list of build view models
-    self.refreshBuild = function (newBuild) {
+    self.mergeBuildIntoList = function (newBuild) {
         var currentBuild,
             isNew = true;
 
@@ -94,7 +94,7 @@ tfsTimeline.BuildsViewModel = function (serviceUrl) {
             updateBuildList(response);
 
             // re-fetch data after 15 seconds
-            setTimeout('tfsTimeline.buildsViewModel.refresh();', 15000);
+            tfsTimeline.setTimeout('tfsTimeline.buildsViewModel.refresh();', 15000);
         });
     };
 
@@ -103,7 +103,7 @@ tfsTimeline.BuildsViewModel = function (serviceUrl) {
     self.updateBuildList = function (buildList) {
         // merge each returned build item into the view model list
         $.each(buildList.Builds, function (index, build) {
-            self.refreshBuild(build);
+            self.mergeBuildIntoList(build);
         });
 
         // update the service url with the URL to refresh the current build 
@@ -113,17 +113,15 @@ tfsTimeline.BuildsViewModel = function (serviceUrl) {
     };
 
     // As long as the build is running, update the build duration.
-    self.updateBuildDuration = function () {
-        var build;
-        for (var index = 0; index < self.builds().length; index++) {
-            build = self.builds()[index];
+    self.updateBuildDuration = function (currentTime) {
+        $.each(self.builds(), function (index, build) {
             if (build.isRunning()) {
                 var startedAt = tfsTimeline.parseJsonDate(build.StartedAt());
-                var duration = Math.abs(new Date() - startedAt) * 1000;
+                var duration = Math.abs(currentTime - startedAt) / 1000;
                 build.runDuration(duration);
             }
-        }
-        setTimeout('tfsTimeline.buildsViewModel.updateBuildDuration()', 1000);
+        });
+        tfsTimeline.setTimeout('tfsTimeline.buildsViewModel.updateBuildDuration(new Date())', 1000);
     };
 };
 
