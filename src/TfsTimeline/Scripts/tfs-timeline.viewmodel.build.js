@@ -91,7 +91,7 @@ tfsTimeline.BuildsViewModel = function (serviceUrl) {
             data: "",
             dataType: "json"
         }).done(function (response) {
-            updateBuildList(response);
+            self.updateBuildList(response);
 
             // re-fetch data after 15 seconds
             tfsTimeline.setTimeout('tfsTimeline.buildsViewModel.refresh();', 15000);
@@ -108,7 +108,7 @@ tfsTimeline.BuildsViewModel = function (serviceUrl) {
 
         // update the service url with the URL to refresh the current build 
         // list with
-        self.serviceUrl = response.Refresh;
+        self.serviceUrl = buildList.Refresh;
         self.isLoading(false);
     };
 

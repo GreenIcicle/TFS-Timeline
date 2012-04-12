@@ -7,7 +7,7 @@
     $(function () {
         var ciBuildServiceUrl = '@Url.Action("BuildTimeline", "BuildsApi", new { projectName = Model.ProjectName, buildName = Model.BuildName })';
         tfsTimeline.buildsViewModel = new tfsTimeline.BuildsViewModel(ciBuildServiceUrl);
-        ko.applyBindings(buildsViewModel);
+        ko.applyBindings(tfsTimeline.buildsViewModel);
         tfsTimeline.buildsViewModel.refresh();
         tfsTimeline.buildsViewModel.updateBuildDuration(new Date());
     });
