@@ -1,1 +1,1 @@
-﻿<%@ Application Codebehind="Global.asax.cs" Inherits="AwesomeTfsMonitor.MvcApplication" Language="C#" %>
+﻿<%@ Application Codebehind="Global.asax.cs" Inherits="Greenicicle.TfsTimeline.MvcApplication" Language="C#" %>

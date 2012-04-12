@@ -112,4 +112,3 @@ namespace Greenicicle.TfsTimeline.Models
         }
     }
 }
-gi
